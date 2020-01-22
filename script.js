@@ -1,0 +1,56 @@
+var config = {
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  scene: {
+    init: init,
+    preload: preload,
+    create: create,
+    update: update
+  },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: {y:300,x:0},
+      debug: false
+    }
+  }
+}
+
+var game = new Phaser.Game(config);
+
+function init() {
+  var platforms;
+  var player;
+  var cursors;
+}
+
+function preload(){
+  this.load.image('background_0','assets/sky.png');
+  this.load.image('background_1','assets/sol_1.png');
+  this.load.image('plat_0','assets/plat_base.png');
+  this.load.spritesheet('perso','assets/perso_stand.png',{frameWidth:110, frameHeight:52});
+}
+
+function create() {
+  this.add.image(400,300,'background_0');
+  this.add.image(400,300,'background_1');
+  platforms = this.physics.add.staticGroup();
+  platforms.create(400,520,'plat_0').setScale(1).refreshBody(); //559
+  platforms.create(400,320,'plat_0').setScale(0.5).refreshBody();
+  player = this.physics.add.sprite(400,400,'perso');
+  player.setCollideWorldBounds(true);
+  this.physics.add.collider(player,platforms);
+  player.setBounce(0.5);
+  cursors = this.input.keyboard.createCursorKeys();
+}
+
+function update(){
+  if (cursors.left.isDown) { player.setVelocityX(-160); }
+  else if (cursors.right.isDown) { player.setVelocityX(160); }
+  else { player.setVelocityX(0); }
+
+  if (cursors.up.isDown && player.body.touching.down) {
+    player.setVelocityY(-350);
+  }
+}
