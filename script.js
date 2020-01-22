@@ -11,7 +11,7 @@ var config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: {y:300,x:0},
+      gravity: {y:2400,x:0},
       debug: false
     }
   }
@@ -36,21 +36,34 @@ function create() {
   this.add.image(400,300,'background_0');
   this.add.image(400,300,'background_1');
   platforms = this.physics.add.staticGroup();
-  platforms.create(400,520,'plat_0').setScale(1).refreshBody(); //559
-  platforms.create(400,320,'plat_0').setScale(0.5).refreshBody();
-  player = this.physics.add.sprite(400,400,'perso');
+
+  platforms.create(400,560,'plat_0').setScale(1).refreshBody(); //559
+  platforms.create(400,420,'plat_0').setScale(0.5).refreshBody();
+  platforms.create(10,300,'plat_0').setScale(0.5).refreshBody();
+  platforms.create(790,300,'plat_0').setScale(0.5).refreshBody();
+  platforms.create(400,180,'plat_0').setScale(0.5).refreshBody();
+
+
+  player = this.physics.add.sprite(50,450,'perso').setSize(41,52).setOffset(10,0);
   player.setCollideWorldBounds(true);
+
   this.physics.add.collider(player,platforms);
-  player.setBounce(0.5);
+  player.setBounce(0.01);
   cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update(){
-  if (cursors.left.isDown) { player.setVelocityX(-160); }
-  else if (cursors.right.isDown) { player.setVelocityX(160); }
+  if (cursors.left.isDown) { player.setVelocityX(-300); }
+  else if (cursors.right.isDown) { player.setVelocityX(300); }
   else { player.setVelocityX(0); }
 
-  if (cursors.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-350);
+  if (player.body.touching.down) { //cursors.up.isDown && player.body.touching.down
+    player.setVelocityY(-200);
+  }
+  if (cursors.up.isDown && player.body.touching.down) { //cursors.up.isDown && player.body.touching.down
+    player.setVelocityY(-800);
+  }
+  if (cursors.down.isDown) {
+    player.setVelocityY(450);
   }
 }
