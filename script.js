@@ -23,20 +23,24 @@ function init() {
     var platforms;
     var player;
     var cursors;
+    var coin;
 }
 
 function preload(){
     this.load.image('background_0','assets/sky.png');
     this.load.image('background_1','assets/sol_1.png');
     this.load.image('plat_0','assets/plat_base.png');
+    this.load.image('coin','assets/gold.png');
     this.load.spritesheet('perso','assets/spritesheet_hamon.png',{frameWidth:50, frameHeight:77});
 }
 
 function create() {
     this.add.image(400,300,'background_0');
     this.add.image(400,300,'background_1');
-    platforms = this.physics.add.staticGroup();
 
+
+
+    platforms = this.physics.add.staticGroup();
     platforms.create(400,560,'plat_0').setScale(1).refreshBody(); //559
     platforms.create(400,400,'plat_0').setScale(0.5).refreshBody();
     platforms.create(10,250,'plat_0').setScale(0.5).refreshBody();
@@ -57,14 +61,25 @@ function create() {
         frameRate: 7,
         repeat: -1
     });
-
     this.anims.create
     ({
         key:'stop',
         frames: [{key:'perso', frame:0}] ,
         frameRate: 20
     });
+    coin= this.physics.add.group
+    ({
+      key: 'coin',
+      repeat: 8,
+      setXY: { x:12, y:0, stepX: 70}
+    });
+    this.physics.add.collider(coin, platforms);
+    this.physics.add.overlap(player, coin, get_coin, null, this);
+}
 
+function get_coin(player, coin)
+{
+    coin.disableBody(true,true);
 }
 
 function update()
