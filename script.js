@@ -24,12 +24,14 @@ function init() {
     var player;
     var cursors;
     var coin;
+    var sprint;
 }
 
 function preload(){
     this.load.image('background_0','assets/sky.png');
     this.load.image('background_1','assets/sol_1.png');
     this.load.image('plat_0','assets/plat_base.png');
+    this.load.image('plat_1','assets/platform_square.png');
     this.load.image('coin','assets/gold.png');
     this.load.spritesheet('perso','assets/spritesheet_hamon.png',{frameWidth:50, frameHeight:77});
 }
@@ -41,11 +43,11 @@ function create() {
 
 
     platforms = this.physics.add.staticGroup();
-    platforms.create(400,560,'plat_0').setScale(1).refreshBody(); //559
-    platforms.create(400,400,'plat_0').setScale(0.5).refreshBody();
-    platforms.create(10,250,'plat_0').setScale(0.5).refreshBody();
-    platforms.create(790,250,'plat_0').setScale(0.5).refreshBody();
-    platforms.create(400,120,'plat_0').setScale(0.5).refreshBody();
+    platforms.create(400,560,'plat_1').setScale(1).refreshBody(); //559
+    platforms.create(400,400,'plat_1').setScale(1).refreshBody();
+    platforms.create(10,250,'plat_1').setScale(1).refreshBody();
+    platforms.create(790,250,'plat_1').setScale(1).refreshBody();
+    platforms.create(400,120,'plat_1').setScale(1).refreshBody();
 
     player = this.physics.add.sprite(50,450,'perso');
     player.setCollideWorldBounds(true);
@@ -86,13 +88,13 @@ function update()
 {
       if (cursors.right.isDown)
       {
-          player.setVelocityX(200);
+          player.setVelocityX(200+sprint);
           player.setFlipX(false);
           player.anims.play('droite', true);
       }
       else if (cursors.left.isDown)
       {
-          player.setVelocityX(-200);
+          player.setVelocityX(-200-sprint);
           player.setFlipX(true);
           player.anims.play('droite', true);
       }
@@ -107,5 +109,13 @@ function update()
       }
       if (cursors.down.isDown) {
         player.setVelocityY(450);
+
+      }
+      if (cursors.shift.isDown)
+      {
+        sprint=200;
+      }
+      else {
+        sprint=0;
       }
 }
