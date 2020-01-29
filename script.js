@@ -24,6 +24,7 @@ function init() {
     var player;
     var cursors;
     var coin;
+    //var sprint;
 }
 
 function preload(){
@@ -37,8 +38,7 @@ function preload(){
 function create() {
     this.add.image(400,300,'background_0');
     this.add.image(400,300,'background_1');
-
-
+    //sprint = 0;
 
     platforms = this.physics.add.staticGroup();
     platforms.create(400,560,'plat_0').setScale(1).refreshBody(); //559
@@ -47,7 +47,7 @@ function create() {
     platforms.create(790,250,'plat_0').setScale(0.5).refreshBody();
     platforms.create(400,120,'plat_0').setScale(0.5).refreshBody();
 
-    player = this.physics.add.sprite(50,450,'perso');
+    player = this.physics.add.sprite(50,450,'perso').setSize(25,0).setOffset(21,0);
     player.setCollideWorldBounds(true);
 
     this.physics.add.collider(player,platforms);
@@ -107,5 +107,12 @@ function update()
       }
       if (cursors.down.isDown) {
         player.setVelocityY(450);
+      }
+      if (cursor.down.isDown) {
+        //sprint=200;
+      }
+      else
+      {
+        //sprint=0;
       }
 }
