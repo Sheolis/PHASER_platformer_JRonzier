@@ -19,7 +19,7 @@ var config = {
 
 var game = new Phaser.Game(config);
 var score = 0;
-e
+
 function init() {
     var platforms;
     var player;
@@ -40,10 +40,26 @@ function preload(){
     this.load.spritesheet('perso','assets/spritesheet_hamon.png',{frameWidth:50, frameHeight:77});
 }
 
+function get_coin(player, coin)
+{
+    coin.disableBody(true,true);
+    score+=10;
+    //scoreTexte.setText('score :'+score);
+    /*if (coins.countActive(true)===0)
+    {
+        coins.children.iterate(
+            function(child)
+            {
+                child.enableBody(true, child.x,0,true,true);
+            }
+        );
+    };*/
+}
+
 function create() {
     this.add.image(400,300,'background_0');
     this.add.image(400,300,'background_1');
-    scoreTexte.setText(16,16,'score : 0', {fontsize: '32px', fill: '#000'});
+    //scoreTexte=this.add.text(16,16,'score : 0', {fontsize: '32px', fill: '#000'});
 
 
     platforms = this.physics.add.staticGroup();
@@ -87,21 +103,7 @@ function create() {
     this.physics.add.overlap(player, coins, get_coin, null, this);
 }
 
-function get_coin(player, coin)
-{
-    coin.disableBody(true,true);
-    score+=10;
-    scoreTexte.setText('score :'+score);
-    if (coins.countActive(true)===0)
-    {
-        coins.children.iterate(
-            function(child)
-            {
-                child.enableBody(true, child.x,0,true,true);
-            }
-        );
-    };
-}
+
 
 function update()
 {
@@ -136,5 +138,4 @@ function update()
       else {
         sprint=0;
       }
-
 }
