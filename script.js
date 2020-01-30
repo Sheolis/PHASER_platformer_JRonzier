@@ -1,66 +1,140 @@
 var config = {
-  type: Phaser.AUTO,
-  width: 800,
-  height: 600,
-  scene: {
-    init: init,
-    preload: preload,
-    create: create,
-    update: update
-  },
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: {y:2400,x:0},
-      debug: false
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    scene: {
+        init: init,
+        preload: preload,
+        create: create,
+        update: update
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: {y:2400,x:0},
+            debug: true
+        }
     }
-  }
 }
 
 var game = new Phaser.Game(config);
-
+var score = 0;
+e
 function init() {
-  var platforms;
-  var player;
-  var cursors;
+    var platforms;
+    var player;
+    var cursors;
+    var coin;
+    var sprint;
+    var scoreTexte;
 }
 
+
+
 function preload(){
-  this.load.image('background_0','assets/sky.png');
-  this.load.image('background_1','assets/sol_1.png');
-  this.load.image('plat_0','assets/plat_base.png');
-  this.load.spritesheet('perso','assets/perso_stand.png',{frameWidth:110, frameHeight:52});
+    this.load.image('background_0','assets/sky.png');
+    this.load.image('background_1','assets/sol_1.png');
+    this.load.image('plat_0','assets/plat_base.png');
+    this.load.image('plat_1','assets/platform_square.png');
+    this.load.image('coin','assets/gold.png');
+    this.load.spritesheet('perso','assets/spritesheet_hamon.png',{frameWidth:50, frameHeight:77});
 }
 
 function create() {
-  this.add.image(400,300,'background_0');
-  this.add.image(400,300,'background_1');
-  platforms = this.physics.add.staticGroup();
-
-  platforms.create(400,560,'plat_0').setScale(1).refreshBody(); //559
-  platforms.create(400,420,'plat_0').setScale(0.5).refreshBody();
-  platforms.create(10,300,'plat_0').setScale(0.5).refreshBody();
-  platforms.create(790,300,'plat_0').setScale(0.5).refreshBody();
-  platforms.create(400,180,'plat_0').setScale(0.5).refreshBody();
+    this.add.image(400,300,'background_0');
+    this.add.image(400,300,'background_1');
+    scoreTexte.setText(16,16,'score : 0', {fontsize: '32px', fill: '#000'});
 
 
-  player = this.physics.add.sprite(50,450,'perso').setSize(41,52).setOffset(10,0);
-  player.setCollideWorldBounds(true);
+    platforms = this.physics.add.staticGroup();
+    platforms.create(50,520,'plat_1').setScale(1).refreshBody(); //559
+    platforms.create(400,400,'plat_1').setScale(1).refreshBody();
+    platforms.create(50,250,'plat_1').setScale(1).refreshBody();
+    platforms.create(710,250,'plat_1').setScale(1).refreshBody();
+    platforms.create(300,120,'plat_1').setScale(1).refreshBody();
+    platforms.create(700,390,'plat_1').setScale(1).refreshBody();
+    platforms.create(300,520,'plat_1').setScale(1).refreshBody();
+    platforms.create(350,50,'plat_1').setScale(1).refreshBody();
+    platforms.create(400,610,'plat_0').setScale(1).refreshBody();
 
-  this.physics.add.collider(player,platforms);
-  player.setBounce(0.01);
-  cursors = this.input.keyboard.createCursorKeys();
+    player = this.physics.add.sprite(50,450,'perso');
+    player.setCollideWorldBounds(false);
+
+    this.physics.add.collider(player,platforms);
+    player.setBounce(0.01);
+    cursors = this.input.keyboard.createCursorKeys();
+
+    this.anims.create
+    ({
+        key:'droite',
+        frames: this.anims.generateFrameNumbers('perso', {start:0,end:3}),
+        frameRate: 7,
+        repeat: -1
+    });
+    this.anims.create
+    ({
+        key:'stop',
+        frames: [{key:'perso', frame:0}] ,
+        frameRate: 20
+    });
+    coins= this.physics.add.group
+    ({
+      key: 'coin',
+      repeat: 8,
+      setXY: { x:12, y:0, stepX: 100}
+    });
+    this.physics.add.collider(coins, platforms);
+    this.physics.add.overlap(player, coins, get_coin, null, this);
 }
 
-function update(){
-  if (cursors.left.isDown) { player.setVelocityX(-300); }
-  else if (cursors.right.isDown) { player.setVelocityX(300); }
-  else { player.setVelocityX(0); }
+function get_coin(player, coin)
+{
+    coin.disableBody(true,true);
+    score+=10;
+    scoreTexte.setText('score :'+score);
+    if (coins.countActive(true)===0)
+    {
+        coins.children.iterate(
+            function(child)
+            {
+                child.enableBody(true, child.x,0,true,true);
+            }
+        );
+    };
+}
 
-  if (cursors.up.isDown && player.body.touching.down) { //cursors.up.isDown && player.body.touching.down
-    player.setVelocityY(-800);
-  }
-  if (cursors.down.isDown) {
-    player.setVelocityY(450);
-  }
+function update()
+{
+      if (cursors.right.isDown)
+      {
+          player.setVelocityX(200+sprint);
+          player.setFlipX(false);
+          player.anims.play('droite', true);
+      }
+      else if (cursors.left.isDown)
+      {
+          player.setVelocityX(-200-sprint);
+          player.setFlipX(true);
+          player.anims.play('droite', true);
+      }
+      else
+      {
+          player.setVelocityX(0);
+          player.anims.play('stop', true);
+      }
+
+      if (cursors.up.isDown && player.body.touching.down) { //cursors.up.isDown && player.body.touching.down
+        player.setVelocityY(-900);
+      }
+      if (cursors.down.isDown) {
+        player.setVelocityY(450);
+      }
+      if (cursors.shift.isDown)
+      {
+        sprint=200;
+      }
+      else {
+        sprint=0;
+      }
+
 }
