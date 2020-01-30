@@ -42,6 +42,7 @@ function preload(){
         }
 
 
+
 function create() {
             this.add.image(400,300,'background_0');
             this.add.image(400,300,'background_1');
@@ -112,11 +113,33 @@ function get_coin(player, coin)
           }
         }
 
+
 function hitChamp (player, champ)
         {
             this.physics.pause();
             player.setTint(0xff0000);
         }
+
+function update()
+{
+      if (cursors.right.isDown)
+      {
+          player.setVelocityX(200);
+          player.setFlipX(false);
+          player.anims.play('droite', true);
+      }
+      else if (cursors.left.isDown)
+      {
+          player.setVelocityX(-200);
+          player.setFlipX(true);
+          player.anims.play('droite', true);
+      }
+      else
+      {
+          player.setVelocityX(0);
+          player.anims.play('stop', true);
+      }
+
 
 function update()
         {
