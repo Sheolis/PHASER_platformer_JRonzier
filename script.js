@@ -35,7 +35,6 @@ function preload(){
     this.load.image('background_0','assets/sky.png');
     this.load.image('background_1','assets/sol_1.png');
     this.load.image('plat_0','assets/plat_base.png');
-    this.load.image('plat_1','assets/platform_square.png');
     this.load.image('coin','assets/gold.png');
     this.load.spritesheet('perso','assets/spritesheet_hamon.png',{frameWidth:50, frameHeight:77});
 }
@@ -107,13 +106,13 @@ function update()
 {
       if (cursors.right.isDown)
       {
-          player.setVelocityX(200+sprint);
+          player.setVelocityX(200);
           player.setFlipX(false);
           player.anims.play('droite', true);
       }
       else if (cursors.left.isDown)
       {
-          player.setVelocityX(-200-sprint);
+          player.setVelocityX(-200);
           player.setFlipX(true);
           player.anims.play('droite', true);
       }
