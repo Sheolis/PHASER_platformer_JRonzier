@@ -57,9 +57,6 @@ function update(){
   else if (cursors.right.isDown) { player.setVelocityX(300); }
   else { player.setVelocityX(0); }
 
-  if (player.body.touching.down) { //cursors.up.isDown && player.body.touching.down
-    player.setVelocityY(-200);
-  }
   if (cursors.up.isDown && player.body.touching.down) { //cursors.up.isDown && player.body.touching.down
     player.setVelocityY(-800);
   }
